@@ -1,9 +1,28 @@
-import { Controller, Get, Post, Param, Delete, UseGuards,Request,Req ,UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+  Req,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
+} from '@nestjs/common';
 import { FilesService } from './files.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileValidatorPipe } from './file-validator/file-validator.pipe';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { File } from './entities/file.entity';
 import { FileUploadDto } from './dto/file-upload-dto';
 @ApiBearerAuth()
@@ -20,48 +39,49 @@ export class FilesController {
   })
   @ApiCreatedResponse({
     description: 'Create file',
-    type:File
+    type: File,
   })
   @Post()
-  @UseInterceptors(FileInterceptor('file',{dest: './tmp'}))
-  async upload(@UploadedFile(
-    new FileValidatorPipe()
-  ) file: Express.Multer.File,@Req() request: Request) {
-    const user: {id:number,email:string} | undefined = request['user'];
+  @UseInterceptors(FileInterceptor('file', { dest: './tmp' }))
+  async upload(
+    @UploadedFile(new FileValidatorPipe()) file: Express.Multer.File,
+    @Req() request: Request,
+  ) {
+    const user: { id: number; email: string } | undefined = request['user'];
     if (!user) throw new BadRequestException('User not found');
-    return await this.filesService.create(file,user);
+    return await this.filesService.create(file, user);
   }
 
   @ApiOkResponse({
     description: 'Get files from user',
-    type:[File]
+    type: [File],
   })
   @Get()
   async findAll(@Req() request: Request) {
-    const user: {id:number,email:string} | undefined = request['user'];
+    const user: { id: number; email: string } | undefined = request['user'];
     if (!user) throw new BadRequestException('User not found');
     return await this.filesService.findAll(user);
   }
 
   @ApiOkResponse({
     description: 'Get file from user',
-    type:File
+    type: File,
   })
   @Get(':id')
-  async findOne(@Param('id') id: string,@Req() request: Request) {
-    const user: {id:number,email:string} | undefined = request['user'];
+  async findOne(@Param('id') id: string, @Req() request: Request) {
+    const user: { id: number; email: string } | undefined = request['user'];
     if (!user) throw new BadRequestException('User not found');
-    return await this.filesService.findOne(+id,user);
+    return await this.filesService.findOne(+id, user);
   }
 
   @ApiOkResponse({
     description: 'File deleted',
-    type:File
+    type: File,
   })
   @Delete(':id')
-  async remove(@Param('id') id: string,@Req() request: Request) {
-    const user: {id:number,email:string} | undefined = request['user'];
+  async remove(@Param('id') id: string, @Req() request: Request) {
+    const user: { id: number; email: string } | undefined = request['user'];
     if (!user) throw new BadRequestException('User not found');
-    return await this.filesService.remove(+id,user);
+    return await this.filesService.remove(+id, user);
   }
 }

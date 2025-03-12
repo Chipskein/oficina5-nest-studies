@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginResponseDto {
-    @ApiProperty()
-    readonly token: string;
+  @ApiProperty()
+  readonly token: string;
 }

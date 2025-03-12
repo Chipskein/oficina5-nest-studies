@@ -29,7 +29,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     }),
     UsersModule,
     AuthModule,
-    FilesModule
+    FilesModule,
   ],
   providers: [AuthService],
 })

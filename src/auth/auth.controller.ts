@@ -8,15 +8,13 @@ import { LoginResponseDto } from './dto/login-response-dto';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-    constructor(
-        private authService: AuthService,
-    ) {}
-    @ApiOkResponse({ 
-        description: 'Login', 
-        type: LoginResponseDto
-    })
-    @Post('')
-    async login(@Body() loginDto: LoginDto) {
-        return this.authService.login(loginDto.email, loginDto.password);
-    }
+  constructor(private authService: AuthService) {}
+  @ApiOkResponse({
+    description: 'Login',
+    type: LoginResponseDto,
+  })
+  @Post('')
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto.email, loginDto.password);
+  }
 }

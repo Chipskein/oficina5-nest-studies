@@ -1,13 +1,12 @@
-
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { File } from '../../files/entities/file.entity'
+import { File } from '../../files/entities/file.entity';
 import { ApiProperty } from '@nestjs/swagger';
 @Entity()
 export class User {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
-  
+
   @ApiProperty()
   @Column()
   firstName: string;
@@ -23,9 +22,7 @@ export class User {
   @Column()
   email: string;
 
-
   @ApiProperty()
-  @OneToMany(() => File, file => file.user)
+  @OneToMany(() => File, (file) => file.user)
   files: File[];
-
 }
