@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
+import { FilesModule } from './files/files.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -16,11 +17,12 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      synchronize: true,
       autoLoadEntities: true,
+      synchronize: true,
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    FilesModule
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],

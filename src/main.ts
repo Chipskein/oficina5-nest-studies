@@ -5,7 +5,7 @@ import * as compression from 'compression';
 
 async function bootstrap() {
   const appConfig={logger:new ConsoleLogger({
-    json:true,
+    //json:true,
     timestamp:true,
     logLevels:['log','error','warn','debug','verbose']
   })}
