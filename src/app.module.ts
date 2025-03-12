@@ -22,7 +22,6 @@ import { FilesModule } from './files/files.module';
     AuthModule,
     FilesModule
   ],
-  controllers: [],
   providers: [AuthService],
 })
 export class AppModule {}

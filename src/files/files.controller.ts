@@ -3,9 +3,9 @@ import { FilesService } from './files.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileValidatorPipe } from './file-validator/file-validator.pipe';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { File } from './entities/file.entity';
-
+import { FileUploadDto } from './dto/file-upload-dto';
 @ApiBearerAuth()
 @ApiTags('files')
 @UseGuards(AuthGuard)
@@ -13,6 +13,11 @@ import { File } from './entities/file.entity';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload file',
+    type: FileUploadDto,
+  })
   @ApiCreatedResponse({
     description: 'Create file',
     type:File
