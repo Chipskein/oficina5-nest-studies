@@ -44,8 +44,8 @@ export class FilesService {
     if(!userExists) throw new BadRequestException('User not found');
     const fileExists=await this.filesRepository.findOne({where:{id,user:userExists}});
     if(!fileExists) throw new BadRequestException('File not found');
-    const res=await this.filesRepository.remove(fileExists);
+    await this.filesRepository.remove(fileExists);
     await rm(fileExists.url);
-    return res
+    return fileExists;
   }
 }
