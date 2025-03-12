@@ -1,7 +1,7 @@
 #!/bin/bash
 BASE_URL="http://localhost:3000"
 echo "Criando user"
-id=$(curl -X POST "$BASE_URL" \
+id=$(curl -X POST "$BASE_URL"/users \
      -H "Content-Type: application/json" \
      -d '{
        "firstName": "John",
@@ -37,21 +37,42 @@ curl -X PATCH "$BASE_URL/users/$USER_ID" \
      }' \
      -w "\nResponse: %{http_code}\n" -i
 
+
 echo "Get User"
 curl -X GET "$BASE_URL/users/$USER_ID" \
      -H "Accept: application/json" \
      -H "Authorization: Bearer $BEARER_TOKEN" \
      -w "\nResponse: %{http_code}\n" -i
 
-echo "Delete User"
-curl -X DELETE "$BASE_URL/users/$USER_ID" \
+
+echo "Uploading file"
+filepath='/home/chipskein/Pictures/black-frost.jpg'
+fileId=$(curl -s -X POST "$BASE_URL/files" \
+     -H "Authorization: Bearer $BEARER_TOKEN" \
+     -F "file=@$filepath" | grep -o '"id":[0-9]*' | cut -d':' -f2 | tr -d '"' | xargs |cut -d' ' -f1)
+echo "File ID: $fileId"
+
+
+echo "Files from user"
+curl -X GET "$BASE_URL/files" \
+     -H "Accept: application/json" \
      -H "Authorization: Bearer $BEARER_TOKEN" \
      -w "\nResponse: %{http_code}\n" -i
 
 
-echo "Uploading file"
-filepath='/home/chipskein/Pictures/black-frost.jpg'
-curl -X POST "$BASE_URL/files" \
+echo "Get File by id from user"
+curl -X GET "$BASE_URL/files/$fileId" \
+     -H "Accept: application/json" \
      -H "Authorization: Bearer $BEARER_TOKEN" \
-     -F "file=@$filepath" \
+     -w "\nResponse: %{http_code}\n" -i
+
+echo "Delete file"
+curl -X DELETE "$BASE_URL/files/$fileId" \
+     -H "Authorization: Bearer $BEARER_TOKEN" \
+     -w "\nResponse: %{http_code}\n" -i
+
+
+echo "Delete User"
+curl -X DELETE "$BASE_URL/users/$USER_ID" \
+     -H "Authorization: Bearer $BEARER_TOKEN" \
      -w "\nResponse: %{http_code}\n" -i

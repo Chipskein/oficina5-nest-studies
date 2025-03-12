@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { File } from './entities/file.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
-
+import { rm } from 'fs/promises';
 @Injectable()
 export class FilesService {
   constructor(
@@ -21,7 +21,7 @@ export class FilesService {
       size,
       url:path,
       name:filename,
-      extension:filename.split('.').pop(),
+      extension:mimetype.split('/').pop(),
       
     });
     return await this.filesRepository.save(newFile);
@@ -44,6 +44,8 @@ export class FilesService {
     if(!userExists) throw new BadRequestException('User not found');
     const fileExists=await this.filesRepository.findOne({where:{id,user:userExists}});
     if(!fileExists) throw new BadRequestException('File not found');
-    return await this.filesRepository.remove(fileExists);
+    const res=await this.filesRepository.remove(fileExists);
+    await rm(fileExists.url);
+    return res
   }
 }
